@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .max-container {
+    @apply mx-auto w-full px-10 max-w-[1300px];
+  }
+
+  body,
+  html {
+    @apply h-full;
+  }
+  #root {
+    @apply flex flex-col h-full;
+  }
+}
