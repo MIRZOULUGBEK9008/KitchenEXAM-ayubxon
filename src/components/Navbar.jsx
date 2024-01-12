@@ -1,23 +1,40 @@
-import {Link, NavLink, Navigate} from "react-router-dom"
-import {CiLogout} from "react-icons/ci"
-import {signOut} from "firebase/auth"
-import {auth} from "../firebase/firebaseConfig"
-import {toast} from "react-toastify"
-import {useGlobalContext} from "../hooks/useGlobalContext"
-import {IoIosAddCircleOutline} from "react-icons/io"
-import {useState} from "react"
+import { Link, NavLink, Navigate } from "react-router-dom";
+import { CiLogout } from "react-icons/ci";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/firebaseConfig";
+import { toast } from "react-toastify";
+import { useGlobalContext } from "../hooks/useGlobalContext";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { useState } from "react";
 
 function Navbar() {
-  const {user, dispatch} = useGlobalContext()
+  const { user, dispatch } = useGlobalContext();
   const logout = () => {
     signOut(auth)
       .then(() => {
-        toast.success("Signout succsessfuly")
+        toast.success("Signout succsessfuly");
       })
       .catch((error) => {
-        toast.error(error.message)
-      })
-  }
+        toast.error(error.message);
+      });
+  };
+
+  const changeMode = () => {
+    const data = document.documentElement.getAttribute("data-theme");
+    if (data === "dark") {
+      document.documentElement.setAttribute("data-theme", "light");
+      localStorage.setItem(
+        "theme",
+        document.documentElement.getAttribute("data-theme")
+      );
+    } else {
+      document.documentElement.setAttribute("data-theme", "dark");
+      localStorage.setItem(
+        "theme",
+        document.documentElement.getAttribute("data-theme")
+      );
+    }
+  };
 
   return (
     <div className="navbar shadow-md bg-base-100">
@@ -50,34 +67,28 @@ function Navbar() {
                 />
               </div>
             </div>
+            <ul
+              tabIndex={0}
+              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <Link to="create" className="justify-between">
+                  Create
+                  <span className="badge">New</span>
+                </Link>
+              </li>
+              <li>
+                <button onClick={logout}>Logout</button>
+              </li>
+              <li>
+                <button onClick={changeMode}>ChangeMode</button>
+              </li>
+            </ul>
           </div>
-        </div>
-        <div className="flex items-center">
-          <button
-            onClick={logout}
-            className="items-center flex btn btn-md ml-3 btn-error max-[700px]:btn-sm  max-[610px]:hidden"
-          >
-            Logout
-          </button>
-          <button
-            onClick={logout}
-            className="max-[610px]:block min-[611px]:hidden mr-[10px] "
-          >
-            <CiLogout />
-          </button>
-          <Link
-            to="/create"
-            className="items-center flex btn btn-md ml-3 btn-success max-[700px]:btn-sm max-[610px]:hidden"
-          >
-            Create
-          </Link>
-          <Link className="max-[610px]:block min-[611px]:hidden" to="/create">
-            <IoIosAddCircleOutline />
-          </Link>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;
